@@ -104,4 +104,45 @@ class UserController extends Controller
             return response()->json(['message' => 'User Find Failed!'], 409);
         }
     }
+
+    public function MyEventsQR(Request $request)
+    {
+        $this->validate($request, [
+            'token' => 'required'
+        ]);
+
+        try{
+            $user = Auth::setToken($request->input('token'))->user();
+            if($user){
+                $events = \DB::table('events')
+                ->join('participants', 'events.id', '=', 'participants.event_id')
+                ->join('users', 'users.id', '=', 'participants.user_id')
+                ->select('events.id', 'events.type_id', 'events.school_id', 'events.organizer_id', 'events.title', 'events.description', 'events.image', 'events.event_date', 'events.start_time', 'events.end_time', 'events.is_outstanding', 'events.is_virtual', 'events.is_open', 'events.location', 'events.event_link', 'events.status', 'participants.assistance', 'participants.assistance_date')
+                ->where('users.id', $user->id)
+                ->get();
+                
+                if($events){
+                    
+                    $data = array(
+                        "user" => $user,
+                        "events" => $events
+                    );
+
+                    return response()->json($data, 200, array(), JSON_PRETTY_PRINT);
+                }else{
+                    
+                    $data = array(
+                        "user" => $user,
+                        "events" => []
+                    );
+                    
+                    return response()->json($data, 200, array(), JSON_PRETTY_PRINT);
+                }
+            }
+            return response()->json(['message' => 'No autorizado'], 401);
+
+        }catch(\Exception $e){
+            return response()->json(['message' => 'User Find Failed!'], 409);
+        }
+    }
 }

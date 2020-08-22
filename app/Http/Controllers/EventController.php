@@ -59,7 +59,7 @@ class EventController extends Controller
                 $event->organizer_id = $organizer->id;
                 $event->title = $request->input('title');
                 $event->description = $request->input('description');
-                $event->image = $image_url;
+                $event->image = $request->input('image_url');
                 $event->event_date = $request->input('event_date');
                 $event->start_time = $request->input('start_time');
                 $event->end_time = $request->input('end_time');
@@ -120,6 +120,7 @@ class EventController extends Controller
             $event->school_id = $request->input('school_id');
             $event->title = $request->input('title');
             $event->description = $request->input('description');
+			$event->image = $request->input('image_url');
 
             if($request->hasFile('image')){
                 $event->image = $image_url;

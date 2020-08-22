@@ -22,6 +22,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->post('users/change-password', 'UserController@ChangePassword');
     $router->get('users/my-events', 'UserController@MyEvents');
     $router->get('users/my-event/{id}', 'UserController@MyEvent');
+    $router->get('users/my-events-qr', 'UserController@MyEventsQR');
+    $router->post('users/qr-authentication', 'AuthController@QrAuthentication');
 
     //organizer ok
     $router->post('organizers/register', 'AuthOrganizerController@Register');
